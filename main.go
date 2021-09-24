@@ -10,13 +10,20 @@ import (
 func main() {
 	api := bootpay.Api{}.New("5b8f6a4d396fa665fdc2b5ea", "rm6EYECr6aroQVG2ntW0A6LpWnkTgP4uQ3H18sDDUYw=", nil, "")
 	GetToken(api)
-	GetBillingKey(api)
 	GetVerify(api)
 	ReceiptCancel(api)
+	GetBillingKey(api)
+	RequestSubscribe(api)
+	RequestSubscribeReserve(api)
+	RequestSubscribeReserveDelete(api)
+	DeleteBillingKey(api)
+	GetEasyUserToken(api)
 	RequestLink(api)
 	ServerSubmit(api)
+	Certificate(api)
 }
 
+// 1. 토큰 발급
 func GetToken(api *bootpay.Api) {
 	fmt.Println("--------------- GetToken() Start ---------------")
 	token, err := api.GetToken()
@@ -24,9 +31,10 @@ func GetToken(api *bootpay.Api) {
 	if err != nil {
 		fmt.Println("get token error: " + err.Error())
 	}
-	fmt.Println("--------------- GetToken() End ---------------")
+	fmt.Println("--------------- GetToken() Start ---------------")
 }
 
+// 2. 결제 검증
 func GetBillingKey(api *bootpay.Api) {
 	fmt.Println("--------------- GetBillingKey() Start ---------------")
 	payload := bootpay.BillingKeyPayload{
@@ -48,6 +56,7 @@ func GetBillingKey(api *bootpay.Api) {
 	fmt.Println("--------------- GetBillingKey() End ---------------")
 }
 
+// 3. 결제 취소 (전액 취소 / 부분 취소)
 func GetVerify(api *bootpay.Api) {
 	receiptId := "610c96352386840036db8bef"
 	fmt.Println("--------------- GetVerify() Start ---------------")
@@ -62,6 +71,7 @@ func GetVerify(api *bootpay.Api) {
 	fmt.Println("--------------- GetVerify() End ---------------")
 }
 
+// 4. 빌링키 발급
 func ReceiptCancel(api *bootpay.Api) {
 	receiptId := "610cc0cb7b5ba40044b04530"
 	name := "관리자"
@@ -76,6 +86,80 @@ func ReceiptCancel(api *bootpay.Api) {
 	fmt.Println("--------------- ReceiptCancel() End ---------------")
 }
 
+// 4-1. 발급된 빌링키로 결제 승인 요청
+func RequestSubscribe(api *bootpay.Api) {
+	fmt.Println("--------------- RequestSubscribe() Start ---------------")
+	payload := bootpay.SubscribePayload{
+		BillingKey: "6100e8c80d681b001dd4e0d7",
+		ItemName: "테스트아이템",
+		Price: 1000,
+		OrderId: fmt.Sprintf("%+8d", (time.Now().UnixNano() / int64(time.Millisecond))),
+	}
+	res, err := api.RequestSubscribe(payload)
+	fmt.Println(res)
+	if err != nil {
+		fmt.Println("get token error: " + err.Error())
+	}
+	fmt.Println("--------------- RequestSubscribe() End ---------------")
+}
+
+// 4-2. 발급된 빌링키로 결제 예약 요청
+func RequestSubscribeReserve(api *bootpay.Api) {
+	fmt.Println("--------------- RequestSubscribeReserve() Start ---------------")
+	payload := bootpay.SubscribePayload{
+		BillingKey: "6100e8c80d681b001dd4e0d7",
+		ItemName: "테스트아이템",
+		Price: 1000,
+		OrderId: fmt.Sprintf("%+8d", (time.Now().UnixNano() / int64(time.Millisecond))),
+		ExecuteAt: time.Now().UnixNano() / int64(time.Millisecond) / 1000 + 10,
+	}
+	res, err := api.ReserveSubscribe(payload)
+	fmt.Println(res)
+	if err != nil {
+		fmt.Println("get token error: " + err.Error())
+	}
+	fmt.Println("--------------- RequestSubscribeReserve() End ---------------")
+}
+
+// 4-2-1. 발급된 빌링키로 결제 예약 - 취소 요청
+func RequestSubscribeReserveDelete(api *bootpay.Api) {
+	fmt.Println("--------------- RequestSubscribeReserveDelete() Start ---------------")
+	res, err := api.ReserveCancelSubscribe("6100e892019943002150fef3")
+	fmt.Println(res)
+	if err != nil {
+		fmt.Println("get token error: " + err.Error())
+	}
+	fmt.Println("--------------- RequestSubscribeReserveDelete() End ---------------")
+}
+
+// 4-3. 빌링키 삭제
+func DeleteBillingKey(api *bootpay.Api) {
+	fmt.Println("--------------- DeleteBillingKey() Start ---------------")
+
+	res, err := api.DestroyBillingKey("6100e7ea0d681b001fd4de69")
+	fmt.Println(res)
+	if err != nil {
+		fmt.Println("get token error: " + err.Error())
+	}
+	fmt.Println("--------------- DeleteBillingKey() End ---------------")
+}
+
+// 5. 사용자 토큰 발급
+func GetEasyUserToken(api *bootpay.Api) {
+	fmt.Println("--------------- GetEasyUserToken() Start ---------------")
+	userToken := bootpay.EasyUserTokenPayload{
+		UserId: "1234",
+	}
+
+	res, err := api.GetUserToken(userToken)
+	fmt.Println(res)
+	if err != nil {
+		fmt.Println("get token error: " + err.Error())
+	}
+	fmt.Println("--------------- GetEasyUserToken() End ---------------")
+}
+
+// 6. 결제 링크 생성
 func RequestLink(api *bootpay.Api) {
 	payload := bootpay.Payload{
 		Pg: "kcp",
@@ -94,6 +178,7 @@ func RequestLink(api *bootpay.Api) {
 	fmt.Println("--------------- RequestLink() End ---------------")
 }
 
+// 7. 서버 승인 요청
 func ServerSubmit(api *bootpay.Api) {
 	receiptId := "610cc01b238684002adb904e"
 	fmt.Println("--------------- ServerSubmit() Start ---------------")
@@ -104,4 +189,17 @@ func ServerSubmit(api *bootpay.Api) {
 		fmt.Println("get token error: " + err.Error())
 	}
 	fmt.Println("--------------- ServerSubmit() End ---------------")
+}
+
+// 8. 본인 인증 결과 조회
+func Certificate(api *bootpay.Api) {
+	receiptId := "610cc01b238684002adb904e"
+	fmt.Println("--------------- Certificate() Start ---------------")
+	res, err := api.Certificate(receiptId)
+
+	fmt.Println(res)
+	if err != nil {
+		fmt.Println("get token error: " + err.Error())
+	}
+	fmt.Println("--------------- Certificate() End ---------------")
 }
