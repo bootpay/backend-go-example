@@ -29,7 +29,7 @@ func GetToken(api *bootpay.Api) {
 	token, err := api.GetToken()
 	fmt.Println(token)
 	if err != nil {
-		fmt.Println("get token error: " + err.Error())
+		fmt.Println("error: " + err.Error())
 	}
 	fmt.Println("--------------- GetToken() End ---------------")
 }
@@ -50,7 +50,7 @@ func GetBillingKey(api *bootpay.Api) {
 
 	fmt.Println(billingKey)
 	if err != nil {
-		fmt.Println("get token error: " + err.Error())
+		fmt.Println("error: " + err.Error())
 	}
 	fmt.Println("--------------- GetBillingKey() End ---------------")
 }
@@ -60,7 +60,7 @@ func GetReceipt(api *bootpay.Api) {
 	fmt.Println("--------------- getReceipt() Start ---------------")
 	verify, err := api.GetReceipt(receiptId)
 	if err != nil {
-		fmt.Println("get token error: " + err.Error())
+		fmt.Println("error: " + err.Error())
 	}
 
 	fmt.Println(verify)
@@ -74,7 +74,7 @@ func LookupBillingKey(api *bootpay.Api) {
 	fmt.Println("--------------- LookupBillingKey() Start ---------------")
 	verify, err := api.LookupBillingKey(receiptId)
 	if err != nil {
-		fmt.Println("get token error: " + err.Error())
+		fmt.Println("error: " + err.Error())
 	}
 
 	fmt.Println(verify)
@@ -96,7 +96,7 @@ func ReceiptCancel(api *bootpay.Api) {
 
 	fmt.Println(cancel)
 	if err != nil {
-		fmt.Println("get token error: " + err.Error())
+		fmt.Println("error: " + err.Error())
 	}
 	fmt.Println("--------------- ReceiptCancel() End ---------------")
 }
@@ -114,7 +114,7 @@ func RequestSubscribe(api *bootpay.Api) {
 
 	fmt.Println(cancel)
 	if err != nil {
-		fmt.Println("get token error: " + err.Error())
+		fmt.Println("error: " + err.Error())
 	}
 	fmt.Println("--------------- requestSubscribe() End ---------------")
 }
@@ -134,7 +134,7 @@ func ReserveSubscribe(api *bootpay.Api) {
 
 	fmt.Println(cancel)
 	if err != nil {
-		fmt.Println("get token error: " + err.Error())
+		fmt.Println("error: " + err.Error())
 	}
 	fmt.Println("--------------- ReserveSubscribe() End ---------------")
 }
@@ -146,7 +146,7 @@ func ReserveCancel(api *bootpay.Api) {
 
 	fmt.Println(cancel)
 	if err != nil {
-		fmt.Println("get token error: " + err.Error())
+		fmt.Println("error: " + err.Error())
 	}
 	fmt.Println("--------------- ReserveCancel() End ---------------")
 }
@@ -158,7 +158,7 @@ func ServerConfirm(api *bootpay.Api) {
 
 	fmt.Println(res)
 	if err != nil {
-		fmt.Println("get token error: " + err.Error())
+		fmt.Println("error: " + err.Error())
 	}
 	fmt.Println("--------------- ServerConfirm() End ---------------")
 }
@@ -178,7 +178,7 @@ func GetUserToken(api *bootpay.Api) {
 
 	fmt.Println(cancel)
 	if err != nil {
-		fmt.Println("get token error: " + err.Error())
+		fmt.Println("error: " + err.Error())
 	}
 	fmt.Println("--------------- GetUserToken() End ---------------")
 }
@@ -190,7 +190,7 @@ func DestroyBillingKey(api *bootpay.Api) {
 
 	fmt.Println(res)
 	if err != nil {
-		fmt.Println("get token error: " + err.Error())
+		fmt.Println("error: " + err.Error())
 	}
 	fmt.Println("--------------- DestroyBillingKey() End ---------------")
 }
@@ -202,7 +202,7 @@ func Certificate(api *bootpay.Api) {
 
 	fmt.Println(res)
 	if err != nil {
-		fmt.Println("get token error: " + err.Error())
+		fmt.Println("error: " + err.Error())
 	}
 	fmt.Println("--------------- Certificate() End ---------------")
 }
@@ -225,7 +225,7 @@ func ShoppingStart(api *bootpay.Api) {
 
 	fmt.Println(res)
 	if err != nil {
-		fmt.Println("get token error: " + err.Error())
+		fmt.Println("error: " + err.Error())
 	}
 	fmt.Println("--------------- ShoppingStart() End ---------------")
 }
